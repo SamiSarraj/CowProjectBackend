@@ -1,0 +1,26 @@
+version: "3.5"
+services:
+  mysql-cow:
+    image: "mysql:latest"
+    container_name: cows_database
+    environment:
+      MYSQL_ROOT_PASSWORD: CowsAreBest
+      MYSQL_DATABASE: cow
+    networks:
+      - cows-net
+  
+  backend-cow:
+    build: .
+    depends_on:
+      - mysql-cow
+    environment:
+      TZ: "Europe/Warsaw"
+    restart: on-failure
+    ports:
+      - target: 8080
+        published: 8080
+    networks:
+      - cows-net
+
+networks:
+  cows-net:
